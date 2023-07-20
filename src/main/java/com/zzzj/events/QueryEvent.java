@@ -8,7 +8,7 @@ import java.io.IOException;
  * @author zzzj
  * @create 2023-07-20 16:51
  */
-public class QueryEvent {
+public class QueryEvent extends BinlogEvent {
 
     private final int threadId;
 
@@ -22,9 +22,11 @@ public class QueryEvent {
 
     // QueryEvent源码定义
     // https://dev.mysql.com/doc/dev/mysql-server/latest/classbinary__log_1_1Query__event.html
-    public QueryEvent(byte[] bytes) throws IOException {
+    public QueryEvent(byte[] bodyBytes) throws IOException {
 
-        Reader reader = new Reader(bytes);
+        super(bodyBytes);
+
+        Reader reader = new Reader(bodyBytes);
 
         threadId = reader.readInt4();
 
@@ -52,4 +54,5 @@ public class QueryEvent {
         sb.append('}');
         return sb.toString();
     }
+
 }

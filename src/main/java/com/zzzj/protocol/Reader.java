@@ -9,6 +9,7 @@ import com.zzzj.command.ResponsePacket;
 import com.zzzj.factory.ResponsePacketFactory;
 
 import java.io.ByteArrayInputStream;
+import java.io.EOFException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
@@ -108,22 +109,6 @@ public class Reader {
         return this;
     }
 
-    public int tryReadInt(int len) throws IOException {
-
-        if (len > 4) throw new IllegalArgumentException("Invalid int length : " + len);
-
-        inputStream.mark(len);
-
-        int value = 0;
-
-        for (int i = 0; i < len; i++)
-            value |= inputStream.read() << (i << 3);
-
-        inputStream.reset();
-
-        return value;
-    }
-
     public int readLengthInt() throws IOException {
         int len = readInt1();
 
@@ -154,6 +139,19 @@ public class Reader {
 
         return value;
     }
+
+    public long readInt8() throws IOException {
+        long value = 0;
+        for (int i = 0; i < 8; i++) {
+            int byteValue = inputStream.read();
+            if (byteValue == -1) {
+                throw new EOFException("End of file reached while reading 8 bytes.");
+            }
+            value |= (long) (byteValue & 0xFF) << (8 * i);
+        }
+        return value;
+    }
+
 
     public int readInt2() throws IOException {
         return inputStream.read() |

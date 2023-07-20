@@ -1,9 +1,9 @@
 package com.zzzj;
 
 import com.zzzj.command.ProtocolPacket;
+import com.zzzj.events.BinlogEventHeader;
 import com.zzzj.events.QueryEvent;
 import com.zzzj.protocol.Reader;
-import com.zzzj.events.BinlogEventHeader;
 
 /**
  * @author zzzj
